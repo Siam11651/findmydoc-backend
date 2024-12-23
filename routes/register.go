@@ -1,13 +1,14 @@
 package routes
 
 import (
+	"findmydoc-backend/database"
+	"findmydoc-backend/helpers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type RegisterParams struct {
-	Id       string `json:"id"`
 	AccToken string `json:"acc-token"`
 }
 
@@ -19,5 +20,17 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	println(body.AccToken)
+	var id = helpers.Authenticate(body.AccToken)
+
+	if id == nil {
+		c.Status(401)
+
+		return
+	}
+
+	var _, err = database.Db.Query("select register($1)", id)
+
+	if err != nil {
+		c.Status(500)
+	}
 }

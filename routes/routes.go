@@ -7,5 +7,6 @@ import (
 // RegisterRoutes sets up the application's routes
 func RegisterRoutes(r *gin.Engine) {
 	r.GET("/", HomeHandler)
-	r.POST("/update-location", UpdateLocation)
+	r.POST("/register", RegisterHandler)
+	r.POST("/update-location", UpdateLocationHandler)
 }

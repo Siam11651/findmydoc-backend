@@ -14,7 +14,7 @@ type UpdateLocationParams struct {
 	AccToken  string  `json:"acc-token"`
 }
 
-func UpdateLocation(c *gin.Context) {
+func UpdateLocationHandler(c *gin.Context) {
 	var body UpdateLocationParams
 
 	if err := c.ShouldBindJSON(&body); err != nil {
