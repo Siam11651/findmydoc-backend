@@ -2,8 +2,10 @@ package routes
 
 import (
 	"context"
+	"encoding/json"
 	"findmydoc-backend/helpers"
 	"findmydoc-backend/llm"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,12 +55,38 @@ func LlmHandler(c *gin.Context) {
 	}
 
 	var ctx = context.Background()
+	_, err := llm.Llm.GenerateContent(ctx, messageContents, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
+		json, err := json.Marshal(gin.H{
+			"type":    "part",
+			"content": string(chunk),
+		})
 
-	completion, err := llm.Llm.GenerateContent(ctx, messageContents)
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+
+			return nil
+		}
+
+		fmt.Fprintln(c.Writer, string(json))
+		c.Writer.Flush()
+
+		return nil
+	}))
 
 	if err != nil {
 		c.Status(http.StatusInternalServerError)
 	}
 
-	c.JSON(http.StatusOK, completion.Choices[0].Content)
+	json, err := json.Marshal(gin.H{
+		"type": "done",
+	})
+
+	if err != nil {
+		c.Status(http.StatusInternalServerError)
+
+		return
+	}
+
+	fmt.Fprintln(c.Writer, string(json))
+	c.Writer.Flush()
 }
