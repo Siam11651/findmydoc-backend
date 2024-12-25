@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RegisterParams struct {
+type RegisterDoctorParams struct {
 	AccToken string `json:"acc-token"`
 }
 
-func RegisterHandler(c *gin.Context) {
+func RegisterDoctorHandler(c *gin.Context) {
 	var body RegisterDoctorParams
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -28,7 +28,7 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	var _, err = database.Db.Query("select register($1)", id)
+	var _, err = database.Db.Query("select register_doctor($1)", id)
 
 	if err != nil {
 		c.Status(500)
