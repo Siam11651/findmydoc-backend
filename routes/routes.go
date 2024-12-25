@@ -11,4 +11,5 @@ func RegisterRoutes(r *gin.Engine) {
 	r.POST("/register-doctor", RegisterDoctorHandler)
 	r.POST("/is-doctor", IsDoctorHandler)
 	r.POST("/update-location", UpdateLocationHandler)
+	r.POST("/llm", LlmHandler)
 }

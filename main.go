@@ -7,10 +7,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/tmc/langchaingo/llms/ollama"
 
 	_ "github.com/lib/pq"
 
 	"findmydoc-backend/database"
+	"findmydoc-backend/llm"
 	"findmydoc-backend/routes"
 )
 
@@ -48,6 +50,16 @@ func main() {
 		}
 
 		database.Db = db
+	}
+
+	{
+		ollama, err := ollama.New(ollama.WithModel("llama3.2:1b"))
+
+		if err != nil {
+			panic(err)
+		}
+
+		llm.Llm = ollama
 	}
 
 	routes.RegisterRoutes(r)

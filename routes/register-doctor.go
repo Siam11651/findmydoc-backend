@@ -23,7 +23,7 @@ func RegisterDoctorHandler(c *gin.Context) {
 	var id = helpers.Authenticate(body.AccToken)
 
 	if id == nil {
-		c.Status(401)
+		c.Status(http.StatusUnauthorized)
 
 		return
 	}
