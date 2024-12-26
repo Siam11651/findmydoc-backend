@@ -3,7 +3,7 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ func Authenticate(AccToken string) *string {
 
 	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 
 	if err != nil {
 		return nil
@@ -30,6 +30,10 @@ func Authenticate(AccToken string) *string {
 	err = json.Unmarshal(body, &user)
 
 	if err != nil {
+		return nil
+	}
+
+	if len(user.Id) == 0 {
 		return nil
 	}
 

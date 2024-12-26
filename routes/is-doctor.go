@@ -32,7 +32,7 @@ func IsDoctorHandler(c *gin.Context) {
 	var rows, err = database.Db.Query("select is_doctor($1)", id)
 
 	if err != nil {
-		c.Status(500)
+		c.Status(http.StatusInternalServerError)
 	}
 
 	defer rows.Close()
