@@ -66,5 +66,5 @@ func GetDoctorsHandler(c *gin.Context) {
 		result = append(result, rowValue)
 	}
 
-	c.JSON(http.StatusAccepted, result)
+	c.JSON(http.StatusOK, result)
 }
